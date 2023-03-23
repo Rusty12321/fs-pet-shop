@@ -1,16 +1,18 @@
 const fs = require('fs');
 const http = require('http');
-
+const petRegExp = /^\/pets\/(.*)$/;
 const port = 8000;
 
 const server = http.createServer((req, res) => {
     console.log('incoming response');
     fs.readFile('pets.json', 'utf8', (error, data) => {
         pets = JSON.parse(data);
-        let index = req.url.split('/')[2]
+        // console.log(petRegExp.test(req.url))
+        // console.log(req.url)
+        let index = req.url.split('/')
         if (error) {
             console.error(error)
-        } else if (req.method === 'GET' && index === undefined || (index >= 0 && index <pets.length)) {
+        } else if (req.method === 'GET' && index[1] === 'pets' && index[2] === undefined || (index[2] >= 0 && index[2] <pets.length)) {
             for (let i = 0; i < pets.length; i++) {
                 if (req.url === '/pets') {
                     res.writeHead(200, {'Content-Type': 'application/json'});
@@ -27,7 +29,6 @@ const server = http.createServer((req, res) => {
             }
         } else {
             res.writeHead(404, {'Content-Type': 'text/plain'})
-            // res.write();
             res.end('Not Found');
         }
     })
