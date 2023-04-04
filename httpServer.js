@@ -11,7 +11,6 @@ fs.readFile("pets.json", "utf8", (error, data) => {
 
   app.post("/pets", (req, res) => {
     let { age, kind, name } = req.body;
-    console.log(age, kind, name)
     if (age === undefined || kind === undefined || name === undefined || isNaN(age)) {
       res.status(400);
       res.type("text/plain");
