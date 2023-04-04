@@ -8,14 +8,11 @@ app.use(bodyParser.json());
 
 fs.readFile("pets.json", "utf8", (error, data) => {
   pets = JSON.parse(data);
+
   app.post("/pets", (req, res) => {
     let { age, kind, name } = req.body;
     console.log(age, kind, name)
-    if (age === undefined || kind === undefined || name === undefined) {
-      res.status(404);
-      res.type("text/plain");
-      res.send("Not Found");
-    } else if (isNaN(age)) {
+    if (age === undefined || kind === undefined || name === undefined || isNaN(age)) {
       res.status(400);
       res.type("text/plain");
       res.send("Bad Request");
