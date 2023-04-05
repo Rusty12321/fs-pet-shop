@@ -2,19 +2,28 @@
 GET http://localhost:3000
 
 ###
-GET http://localhost:3000/blah
-
-###
 GET http://localhost:3000/pets
 
 ###
-GET http://localhost:3000/pets/0
+GET http://localhost:3000/pets/3
 
 ###
-GET http://localhost:3000/pets/1
+POST http://localhost:3000/pets
+Content-Type: application/json
+
+{
+    "age": 3,
+    "kind": "parakeet",
+    "name": "Cornflake"
+}
 
 ###
-GET http://localhost:3000/pets/2
+PATCH http://localhost:3000/pets/3
+Content-Type: application/json
+
+{
+    "name": "Fido"
+}
 
 ###
-GET http://localhost:3000/pets/-1
+DELETE http://localhost:3000/pets/3
