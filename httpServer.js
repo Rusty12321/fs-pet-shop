@@ -11,7 +11,12 @@ fs.readFile("pets.json", "utf8", (error, data) => {
 
   app.post("/pets", (req, res) => {
     let { age, kind, name } = req.body;
-    if (age === undefined || kind === undefined || name === undefined || isNaN(age)) {
+    if (
+      age === undefined ||
+      kind === undefined ||
+      name === undefined ||
+      isNaN(age)
+    ) {
       res.status(400);
       res.type("text/plain");
       res.send("Bad Request");
@@ -23,6 +28,51 @@ fs.readFile("pets.json", "utf8", (error, data) => {
       res.send(newPet);
       pets.push(newPet);
       fs.writeFile("pets.json", `${JSON.stringify(pets)}`, () => {});
+    }
+  });
+
+  app.patch("/pets/:petId", (req, res) => {
+    let id = req.params.petId;
+    let { age, kind, name } = req.body;
+    if (id === undefined || (id >= 0 && id < pets.length)) {
+      if (
+        (kind === undefined && name === undefined && age === undefined) ||
+        (age !== undefined && isNaN(age))
+      ) {
+        res.status(400);
+        res.type("text/plain");
+        res.send("Bad Request");
+      } else {
+        for (let char in pets[id]) {
+          let body = req.body[char];
+          if (body !== undefined) {
+            pets[id][char] = body;
+          }
+        }
+        res.status(200);
+        res.type("application/json");
+        res.send(pets[id]);
+        fs.writeFile("pets.json", `${JSON.stringify(pets)}`, () => {});
+      }
+    } else {
+      res.type("text/plain");
+      res.status(404);
+      res.send("Not Found");
+    }
+  });
+
+  app.delete("/pets/:petId", (req, res) => {
+    let id = req.params.petId;
+    if (id === undefined || (id >= 0 && id < pets.length)) {
+      res.status(200);
+      res.type("application/json");
+      res.send(pets[id]);
+      pets.splice(id, 1);
+      fs.writeFile("pets.json", `${JSON.stringify(pets)}`, () => {});
+    } else {
+      res.type("text/plain");
+      res.status(404);
+      res.send("Not Found");
     }
   });
 
