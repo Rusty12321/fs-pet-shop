@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-// const bodyParser = require("body-parser");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -12,7 +11,6 @@ const port = process.env.PORT || 3000;
 pool.connect();
 
 app.use(express.json());
-// app.use(bodyParser.json());
 
 app.get("/pets", (req, res) => {
   pool.query("SELECT * FROM pet").then((result) => {
